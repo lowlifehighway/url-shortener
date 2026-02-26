@@ -13,6 +13,7 @@ export function RedirectPage() {
   const [requiresPin, setRequiresPin] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [checkingPassword, setCheckingPassword] = useState(false);
   useEffect(() => {
     if (!shortCode) {
       navigate('/');
@@ -38,6 +39,7 @@ export function RedirectPage() {
   const handlePinSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setCheckingPassword(true);
     try {
       const response = await fetch(`${API_URL}/api/${shortCode}/verify`, {
         method: 'POST',
@@ -57,6 +59,7 @@ export function RedirectPage() {
       console.log(err.code);
       setError('Failed to connect to server');
     }
+    setCheckingPassword(false);
   };
 
   if (notFound) {
@@ -149,10 +152,10 @@ export function RedirectPage() {
               </button>
               <button
                 type="submit"
-                disabled={pin.length !== 4}
+                disabled={pin.length !== 4 || checkingPassword}
                 className="flex-1 px-4 py-2 bg-[#DC2626] text-white font-medium rounded-md hover:bg-[#DC2626]/90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Continue
+                {checkingPassword ? 'Verifying...' : 'Continue'}
               </button>
             </div>
           </form>
