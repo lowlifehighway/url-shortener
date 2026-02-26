@@ -1,6 +1,8 @@
 # LinkVault
 
 A secure, PIN-protected URL shortener with automatic QR code generation.
+Frontend: https://url-shortener-nu-lemon.vercel.app/
+Backend: https://tough-therese-lowlifehighway-df9b05af.koyeb.app/
 
 ## Features
 
