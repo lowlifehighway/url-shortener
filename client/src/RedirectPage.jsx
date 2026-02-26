@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router';
 import { Lock, AlertTriangle, Unlink, LoaderCircle } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export function RedirectPage() {
   const { shortCode } = useParams();
   const loaderRef = useRef();
@@ -17,7 +19,7 @@ export function RedirectPage() {
       return;
     }
 
-    fetch(`/api/${shortCode}`)
+    fetch(`${API_URL}/api/${shortCode}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
@@ -37,7 +39,7 @@ export function RedirectPage() {
     e.preventDefault();
     setError('');
     try {
-      const response = await fetch(`/api/${shortCode}/verify`, {
+      const response = await fetch(`${API_URL}/api/${shortCode}/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ pin }),

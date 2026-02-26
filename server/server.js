@@ -14,9 +14,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ---------------------------------------------------------------------------
 // In-Memory Cache
-// ---------------------------------------------------------------------------
 let cache = {};
 
 function loadCache() {
@@ -33,9 +31,7 @@ function loadCache() {
 
 loadCache();
 
-// ---------------------------------------------------------------------------
 // Buffered Save
-// ---------------------------------------------------------------------------
 let saveTimer = null;
 const SAVE_DELAY_MS = 300;
 
@@ -49,9 +45,7 @@ function bufferedSave() {
   }, SAVE_DELAY_MS);
 }
 
-// ---------------------------------------------------------------------------
 // Rate Limiting
-// ---------------------------------------------------------------------------
 const rateLimitMap = {};
 const RATE_LIMIT = 10;
 const RATE_WINDOW_MS = 60_000;
@@ -69,9 +63,7 @@ function isRateLimited(ip) {
   return rateLimitMap[ip].count > RATE_LIMIT;
 }
 
-// ---------------------------------------------------------------------------
 // Helpers
-// ---------------------------------------------------------------------------
 function generateShortCode(length = 6) {
   const chars =
     'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -92,9 +84,7 @@ function isExpired(link) {
   return new Date() > new Date(link.expires);
 }
 
-// ---------------------------------------------------------------------------
 // POST /api/links — Create a short link
-// ---------------------------------------------------------------------------
 app.post('/api/links', (req, res) => {
   if (isRateLimited(req.ip)) {
     return res
@@ -141,9 +131,7 @@ app.post('/api/links', (req, res) => {
   });
 });
 
-// ---------------------------------------------------------------------------
 // GET /:shortCode — Redirect or prompt for PIN
-// ---------------------------------------------------------------------------
 app.get('/api/:shortCode', (req, res) => {
   const { shortCode } = req.params;
   const link = cache[shortCode];
@@ -166,9 +154,7 @@ app.get('/api/:shortCode', (req, res) => {
   }
 });
 
-// ---------------------------------------------------------------------------
 // POST /:shortCode/verify — Verify PIN and return URL
-// ---------------------------------------------------------------------------
 app.post('/api/:shortCode/verify', (req, res) => {
   if (isRateLimited(req.ip)) {
     return res
@@ -202,16 +188,7 @@ app.post('/api/:shortCode/verify', (req, res) => {
   return res.status(200).json({ long_url: link.long_url });
 });
 
-// ---------------------------------------------------------------------------
-// GET /api/links — List all links (remove in production)
-// ---------------------------------------------------------------------------
-app.get('/api/links', (req, res) => {
-  res.json(Object.values(cache));
-});
-
-// ---------------------------------------------------------------------------
 // Start
-// ---------------------------------------------------------------------------
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`LinkVault API running on http://localhost:${PORT}`);

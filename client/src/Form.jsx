@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Link2, AlertTriangle, Lock, Download } from 'lucide-react';
 import QRCode from 'qrcode';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
 const forbiddenWords = [
   'virus',
   'malware',
@@ -41,7 +42,7 @@ export default function Form() {
     }
 
     try {
-      const response = await fetch('/api/links', {
+      const response = await fetch(`${API_URL}/api/links`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ long_url: longUrl, pin }),
@@ -56,7 +57,7 @@ export default function Form() {
 
       setData(result);
 
-      const generatedShortUrl = `http://localhost:5173/${result.id}`;
+      const generatedShortUrl = `${window.location.origin}/${result.id}`;
       setShortUrl(generatedShortUrl);
 
       const qrDataUrl = await QRCode.toDataURL(generatedShortUrl, {
