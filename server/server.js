@@ -3,12 +3,14 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = path.join(__dirname, 'links.json');
 
 const app = express();
 app.use(express.json());
+app.use(cors({ origin: '*' }));
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
@@ -190,6 +192,6 @@ app.post('/api/:shortCode/verify', (req, res) => {
 
 // Start
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`LinkVault API running on http://localhost:${PORT}`);
 });
