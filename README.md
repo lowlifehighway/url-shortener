@@ -2,6 +2,10 @@
 
 A secure, PIN-protected URL shortener with automatic QR code generation.
 
+# Live URL
+Frontend: **https://url-shortener-nu-lemon.vercel.app/**
+Backend: **https://url-shortener-nu-lemon.vercel.app/Vfe0fa** - Pin (1234)
+
 ## Features
 
 - **PIN Protection** — every short link requires a 4-digit PIN to access
